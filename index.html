@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dashboard Ketaatan SIPATUH-PKS</title>
+<style>
+  :root{
+    --bg:#eaeeea; --surface:#fff; --ink:#18211c; --muted:#5a6a5f;
+    --line:#d7ded8; --brand:#14532d; --brand-600:#1c6b3c; --brand-50:#e8f1ea;
+    --gold:#a9761b; --red:#b8321f; --amber:#b7791f; --green:#2f7d34;
+    --r:14px; --sh:0 1px 2px rgba(15,30,20,.06),0 4px 16px -6px rgba(15,30,20,.14);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:15px/1.55 "Segoe UI",Roboto,-apple-system,"Helvetica Neue",Arial,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  .wrap{max-width:1220px;margin:0 auto;padding:22px 20px 48px}
+
+  /* header */
+  header{background:linear-gradient(135deg,#0f3d21,#1a5c33 62%,#1c6b3c);color:#fff}
+  .head-in{max-width:1220px;margin:0 auto;padding:22px 20px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+  .crest{width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .crest svg{width:28px;height:28px}
+  .kick{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#bfe0c8;font-weight:600}
+  header h1{margin:2px 0 2px;font-size:21px;font-weight:700;letter-spacing:.2px}
+  .head-sub{font-size:12.5px;color:#dcebdf}
+  .head-tag{margin-left:auto;text-align:right;font-size:11.5px;color:#cfe6d5;line-height:1.7}
+  .head-tag b{display:block;font-size:15px;color:#fff}
+  .rule{height:4px;background:linear-gradient(90deg,var(--gold),#d9a441)}
+
+  /* KPI */
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:20px}
+  .kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);
+    padding:16px 16px 14px;display:flex;flex-direction:column;gap:2px;border-top:3px solid var(--brand);min-width:0}
+  .kpi--amber{border-top-color:var(--amber)}
+  .kpi-ico{color:var(--brand);opacity:.5} .kpi--amber .kpi-ico{color:var(--amber);opacity:.8}
+  .kpi-ico svg{width:20px;height:20px}
+  .kpi-num{font-size:30px;font-weight:800;color:var(--brand);letter-spacing:-.5px;font-variant-numeric:tabular-nums;line-height:1.15}
+  .kpi--amber .kpi-num{color:var(--amber)}
+  .kpi-lbl{font-size:12.5px;font-weight:600} .kpi-sub{font-size:11px;color:var(--muted)}
+
+  /* grid + card */
+  .grid{display:grid;gap:16px;margin-top:16px}
+  .g3{grid-template-columns:repeat(3,1fr)} .g2{grid-template-columns:1.05fr .95fr}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:18px;min-width:0}
+  .card h2{margin:0 0 4px;font-size:12.5px;font-weight:700;color:var(--brand);text-transform:uppercase;letter-spacing:.7px;
+    display:flex;align-items:center;gap:8px}
+  .card h2::before{content:"";width:3px;height:14px;border-radius:2px;background:var(--brand)}
+  .card .cap{font-size:11px;color:var(--muted);margin:0 0 14px}
+
+  /* donut */
+  .donut-wrap{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+  .donut{width:132px;height:132px;border-radius:50%;background:conic-gradient(var(--red) 0 100.00%,var(--amber) 100.00% 100.00%,var(--green) 100.00% 100%);flex:0 0 auto;
+    display:flex;align-items:center;justify-content:center;position:relative}
+  .donut::after{content:"";position:absolute;inset:20px;background:var(--surface);border-radius:50%}
+  .donut-c{position:relative;text-align:center;z-index:1}
+  .donut-c b{display:block;font-size:24px;font-weight:800;color:var(--red);font-variant-numeric:tabular-nums}
+  .donut-c span{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+  .legend{display:flex;flex-direction:column;gap:7px;font-size:12.5px}
+  .legend i{width:9px;height:9px;border-radius:2px;display:inline-block;margin-right:8px}
+  .lg-red i{background:var(--red)} .lg-amber i{background:var(--amber)} .lg-green i{background:var(--green)}
+  .legend b{font-variant-numeric:tabular-nums}
+  .note{margin-top:12px;font-size:11.5px;color:var(--muted);line-height:1.5;
+    border-left:3px solid var(--line);padding-left:10px}
+
+  /* bars */
+  .bar{display:grid;grid-template-columns:150px 1fr 40px;align-items:center;gap:10px;margin:8px 0;font-size:12.5px}
+  .bar-lbl{text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink)}
+  .bar-lbl--wide{font-size:11.5px}
+  .bar-track{background:var(--brand-50);border-radius:999px;height:16px;overflow:hidden}
+  .bar-fill{display:block;height:100%;background:var(--brand-600);border-radius:999px}
+  .bar-fill--alt{background:var(--gold)}
+  .bar-val{text-align:right;font-variant-numeric:tabular-nums;color:var(--muted);font-weight:700}
+
+  /* year columns */
+  .cols{display:flex;gap:10px;align-items:flex-end;height:150px;padding-top:6px}
+  .col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;height:100%}
+  .col-bar{width:60%;max-width:34px;background:var(--brand-600);border-radius:5px 5px 0 0;min-height:3px}
+  .col-val{font-size:12px;font-weight:700;font-variant-numeric:tabular-nums}
+  .col-lbl{font-size:10.5px;color:var(--muted)}
+
+  /* SOP */
+  ol.sop{list-style:none;margin:0;padding:0}
+  ol.sop li{display:flex;gap:12px;padding:10px 0;border-top:1px solid var(--line)}
+  ol.sop li:first-child{border-top:0}
+  .sop-step{flex:0 0 auto;width:24px;height:24px;border-radius:50%;background:var(--brand);color:#fff;
+    font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
+  ol.sop b{font-size:13px} .sop-sla{display:inline-block;margin-left:8px;font-size:11px;font-weight:700;
+    color:var(--amber);background:#fbf1df;border-radius:4px;padding:1px 7px;vertical-align:1px}
+  .sop-note{display:block;font-size:11.5px;color:var(--muted);margin-top:2px}
+
+  /* table */
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+  .search{position:relative;flex:1;min-width:200px}
+  .search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:var(--muted)}
+  #q,select{width:100%;padding:9px 12px;border:1px solid var(--line);border-radius:8px;font-size:13px;background:var(--surface);color:var(--ink)}
+  #q{padding-left:33px} select{width:auto;min-width:150px}
+  #q:focus-visible,select:focus-visible{outline:2px solid var(--brand);outline-offset:1px}
+  .count{font-size:12px;color:var(--muted);margin:0 0 10px}
+  .tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+  table{width:100%;border-collapse:collapse;font-size:12.5px;table-layout:fixed;min-width:780px}
+  col.c-no{width:42px} col.c-date{width:112px} col.c-status{width:100px} col.c-name{width:24%}
+  thead th{background:var(--brand);color:#fff;text-align:left;padding:10px 12px;font-size:11px;font-weight:600;
+    text-transform:uppercase;letter-spacing:.4px;position:sticky;top:0;cursor:pointer;user-select:none}
+  thead th::after{content:"";opacity:.5;font-size:9px}
+  thead th.asc::after{content:" \25B2"} thead th.desc::after{content:" \25BC"}
+  tbody td{padding:9px 12px;border-top:1px solid var(--line);vertical-align:top}
+  tbody tr{border-left:3px solid transparent}
+  tbody tr[data-status="Merah"]{border-left-color:var(--red)}
+  tbody tr:nth-child(even){background:#f6faf6}
+  tbody tr:hover{background:var(--brand-50)}
+  .c-no{color:var(--muted);font-variant-numeric:tabular-nums}
+  .c-name{font-weight:600}
+  .c-date{font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--muted)}
+  .c-aspek span{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:var(--muted)}
+  .c-status{text-align:center}
+  .badge{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;color:#fff;white-space:nowrap}
+  .badge .dot{width:6px;height:6px;border-radius:50%;background:#fff;opacity:.9}
+  .badge--red{background:var(--red)} .badge--amber{background:var(--amber)} .badge--green{background:var(--green)}
+  #empty{display:none} #empty td{padding:26px;text-align:center;color:var(--muted)}
+
+  .callout{margin-top:16px;background:#fbf4e6;border:1px solid #ecdcbd;border-left:4px solid var(--amber);
+    border-radius:12px;padding:16px 18px}
+  .callout b{color:var(--gold)} .callout p{margin:6px 0 0;font-size:13px;line-height:1.65}
+  footer{max-width:1220px;margin:0 auto;padding:22px 20px 0;color:var(--muted);font-size:11.5px;text-align:center;line-height:1.7}
+
+  @media (max-width:1024px){ .kpis{grid-template-columns:repeat(2,1fr)} .g3,.g2{grid-template-columns:1fr} }
+  @media (max-width:560px){
+    .bar{grid-template-columns:1fr auto;gap:4px} .bar-track{grid-column:1/-1}
+    .head-tag{margin-left:0;text-align:left}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+  @media print{
+    body{background:#fff} .card,.kpi{box-shadow:none} .toolbar{display:none}
+    .tbl-scroll{overflow:visible;border:0} table{min-width:0} thead th{position:static}
+    .c-aspek span{-webkit-line-clamp:unset;display:block} tbody tr:hover{background:none}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="head-in">
+    <span class="crest" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c4 3 6 6 6 10a6 6 0 0 1-12 0c0-4 2-7 6-10z"/><path d="M12 21V9"/></svg></span>
+    <div>
+      <div class="kick">Dinas Lingkungan Hidup Kabupaten Labuhanbatu Utara</div>
+      <h1>Dashboard Ketaatan SIPATUH-PKS</h1>
+      <div class="head-sub">Sistem Pemantauan Ketaatan &amp; Tindak Lanjut Pengawasan Ketaatan Lingkungan PKS &middot; Bidang PPLH</div>
+    </div>
+    <div class="head-tag">Cakupan arsip<b>2019 &ndash; 2026</b>209 Berita Acara &middot; 57 objek usaha</div>
+  </div>
+  <div class="rule"></div>
+</header>
+
+<div class="wrap">
+
+  <div class="kpis">
+      <div class="kpi kpi--brand"><span class="kpi-ico"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 6h12M4 10h12M4 14h8" stroke-linecap="round"/></svg></span><span class="kpi-num">209</span><span class="kpi-lbl">Berita Acara</span><span class="kpi-sub">arsip pengawasan 2019-2026</span></div>
+      <div class="kpi kpi--brand"><span class="kpi-ico"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 16V5l7-2v13M11 16V8l5 2v6M3 16h14"/></svg></span><span class="kpi-num">57</span><span class="kpi-lbl">Objek Usaha Diawasi</span><span class="kpi-sub">dibakukan dari 77 nama</span></div>
+      <div class="kpi kpi--brand"><span class="kpi-ico"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 14l4-4 3 3 5-6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="kpi-num">1.142</span><span class="kpi-lbl">Butir Temuan</span><span class="kpi-sub">tersebar di 57 objek usaha</span></div>
+      <div class="kpi kpi--amber"><span class="kpi-ico"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M10 3l7 13H3zM10 8v4M10 14h.01" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="kpi-num">15</span><span class="kpi-lbl">Perlu Pengawasan Ulang</span><span class="kpi-sub">terakhir diawasi &gt; 2 tahun</span></div>
+  </div>
+
+  <div class="grid g3">
+    <div class="card">
+      <h2>Status Ketaatan Objek Usaha</h2>
+      <p class="cap">Klasifikasi kartu skor pada pemetaan awal</p>
+      <div class="donut-wrap">
+        <div class="donut"><div class="donut-c"><b>57</b><span>dari 57 Merah</span></div></div>
+        <div class="legend">
+          <span class="lg-red"><i></i>Merah &lt;50 &nbsp; <b>57</b></span>
+          <span class="lg-amber"><i></i>Kuning 50&ndash;79 &nbsp; <b>0</b></span>
+          <span class="lg-green"><i></i>Hijau &ge;80 &nbsp; <b>0</b></span>
+        </div>
+      </div>
+      <p class="note">Merah menyeluruh berarti tindak lanjut belum pernah tercatat &amp; tenggat belum dipantau, bukan indikasi seluruh objek melanggar. Status bergerak saat kolom tindak lanjut mulai dimutakhirkan.</p>
+    </div>
+
+    <div class="card">
+      <h2>Aspek Temuan Terbanyak</h2>
+      <p class="cap">Persentase dari 209 Berita Acara</p>
+        <div class="bar" title="Air Limbah/IPAL: 57% Berita Acara"><span class="bar-lbl">Air Limbah/IPAL</span><span class="bar-track"><span class="bar-fill" style="width:100.0%"></span></span><span class="bar-val">57%</span></div>
+        <div class="bar" title="Limbah B3: 38% Berita Acara"><span class="bar-lbl">Limbah B3</span><span class="bar-track"><span class="bar-fill" style="width:66.7%"></span></span><span class="bar-val">38%</span></div>
+        <div class="bar" title="Persetujuan Lingkungan: 35% Berita Acara"><span class="bar-lbl">Persetujuan Lingkungan</span><span class="bar-track"><span class="bar-fill" style="width:61.4%"></span></span><span class="bar-val">35%</span></div>
+        <div class="bar" title="Emisi/Udara: 29% Berita Acara"><span class="bar-lbl">Emisi/Udara</span><span class="bar-track"><span class="bar-fill" style="width:50.9%"></span></span><span class="bar-val">29%</span></div>
+        <div class="bar" title="Pelaporan/SIMPEL: 25% Berita Acara"><span class="bar-lbl">Pelaporan/SIMPEL</span><span class="bar-track"><span class="bar-fill" style="width:43.9%"></span></span><span class="bar-val">25%</span></div>
+    </div>
+
+    <div class="card">
+      <h2>Sebaran Pengawasan Terakhir per Tahun</h2>
+      <p class="cap">Jumlah objek usaha menurut tahun pengawasan terakhir</p>
+      <div class="cols">
+        <div class="col" title="2021: 1 objek"><span class="col-bar" style="height:5%"></span><span class="col-val">1</span><span class="col-lbl">2021</span></div>
+        <div class="col" title="2022: 2 objek"><span class="col-bar" style="height:9%"></span><span class="col-val">2</span><span class="col-lbl">2022</span></div>
+        <div class="col" title="2023: 3 objek"><span class="col-bar" style="height:14%"></span><span class="col-val">3</span><span class="col-lbl">2023</span></div>
+        <div class="col" title="2024: 9 objek"><span class="col-bar" style="height:41%"></span><span class="col-val">9</span><span class="col-lbl">2024</span></div>
+        <div class="col" title="2025: 20 objek"><span class="col-bar" style="height:91%"></span><span class="col-val">20</span><span class="col-lbl">2025</span></div>
+        <div class="col" title="2026: 22 objek"><span class="col-bar" style="height:100%"></span><span class="col-val">22</span><span class="col-lbl">2026</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid g2">
+    <div class="card">
+      <h2>Distribusi Aspek Temuan Terakhir</h2>
+      <p class="cap">Berapa objek usaha yang temuan terakhirnya menyentuh tiap aspek (dari 57 objek)</p>
+        <div class="bar"><span class="bar-lbl">Lain-lain</span><span class="bar-track"><span class="bar-fill bar-fill--alt" style="width:100.0%"></span></span><span class="bar-val">31</span></div>
+        <div class="bar"><span class="bar-lbl">Air Limbah/IPAL</span><span class="bar-track"><span class="bar-fill bar-fill--alt" style="width:96.8%"></span></span><span class="bar-val">30</span></div>
+        <div class="bar"><span class="bar-lbl">Persetujuan Lingkungan</span><span class="bar-track"><span class="bar-fill bar-fill--alt" style="width:93.5%"></span></span><span class="bar-val">29</span></div>
+        <div class="bar"><span class="bar-lbl">Limbah B3</span><span class="bar-track"><span class="bar-fill bar-fill--alt" style="width:87.1%"></span></span><span class="bar-val">27</span></div>
+        <div class="bar"><span class="bar-lbl">Emisi/Udara</span><span class="bar-track"><span class="bar-fill bar-fill--alt" style="width:51.6%"></span></span><span class="bar-val">16</span></div>
+        <div class="bar"><span class="bar-lbl">Pencemaran/Tanggul/Ceceran</span><span class="bar-track"><span class="bar-fill bar-fill--alt" style="width:48.4%"></span></span><span class="bar-val">15</span></div>
+        <div class="bar"><span class="bar-lbl">Pelaporan/SIMPEL</span><span class="bar-track"><span class="bar-fill bar-fill--alt" style="width:41.9%"></span></span><span class="bar-val">13</span></div>
+        <div class="bar"><span class="bar-lbl">Sampah/Domestik</span><span class="bar-track"><span class="bar-fill bar-fill--alt" style="width:38.7%"></span></span><span class="bar-val">12</span></div>
+        <div class="bar"><span class="bar-lbl">Sertifikasi SDM</span><span class="bar-track"><span class="bar-fill bar-fill--alt" style="width:38.7%"></span></span><span class="bar-val">12</span></div>
+        <div class="bar"><span class="bar-lbl">Kebakaran Lahan (Karhutla)</span><span class="bar-track"><span class="bar-fill bar-fill--alt" style="width:29.0%"></span></span><span class="bar-val">9</span></div>
+    </div>
+    <div class="card">
+      <h2>Beban Temuan per Objek Usaha</h2>
+      <p class="cap">Delapan objek dengan jenis aspek temuan terakhir terbanyak</p>
+        <div class="bar"><span class="bar-lbl bar-lbl--wide">CV Sawit Sumatera Perkasa</span><span class="bar-track"><span class="bar-fill" style="width:100.0%"></span></span><span class="bar-val">10</span></div>
+        <div class="bar"><span class="bar-lbl bar-lbl--wide">PT. AAL (Agung Agro Lestari)</span><span class="bar-track"><span class="bar-fill" style="width:90.0%"></span></span><span class="bar-val">9</span></div>
+        <div class="bar"><span class="bar-lbl bar-lbl--wide">RSU Flora</span><span class="bar-track"><span class="bar-fill" style="width:90.0%"></span></span><span class="bar-val">9</span></div>
+        <div class="bar"><span class="bar-lbl bar-lbl--wide">RSU Tiga Bersaudara</span><span class="bar-track"><span class="bar-fill" style="width:90.0%"></span></span><span class="bar-val">9</span></div>
+        <div class="bar"><span class="bar-lbl bar-lbl--wide">RSUD Aek Kanopan</span><span class="bar-track"><span class="bar-fill" style="width:80.0%"></span></span><span class="bar-val">8</span></div>
+        <div class="bar"><span class="bar-lbl bar-lbl--wide">PT. Andalas Intiagro Lestari</span><span class="bar-track"><span class="bar-fill" style="width:70.0%"></span></span><span class="bar-val">7</span></div>
+        <div class="bar"><span class="bar-lbl bar-lbl--wide">PT. NAGALI SEMANGAT JAYA</span><span class="bar-track"><span class="bar-fill" style="width:70.0%"></span></span><span class="bar-val">7</span></div>
+        <div class="bar"><span class="bar-lbl bar-lbl--wide">PT. Sinar Sawit Lestari</span><span class="bar-track"><span class="bar-fill" style="width:70.0%"></span></span><span class="bar-val">7</span></div>
+    </div>
+  </div>
+
+  <div class="grid g2">
+    <div class="card">
+      <h2>Matriks Eskalasi Tindak Lanjut (SOP)</h2>
+      <p class="cap">Jenjang dan batas waktu penanganan setelah Berita Acara terbit</p>
+      <ol class="sop">
+        <li><span class="sop-step">1</span><div><b>Surat Pemberitahuan</b><span class="sop-sla">30 hari</span><span class="sop-note">temuan awal, minta klarifikasi &amp; rencana perbaikan</span></div></li>
+        <li><span class="sop-step">2</span><div><b>Surat Teguran</b><span class="sop-sla">14 hari</span><span class="sop-note">kewajiban belum dipenuhi setelah pemberitahuan</span></div></li>
+        <li><span class="sop-step">3</span><div><b>Rekomendasi Paksaan Pemerintah</b><span class="sop-sla">7 hari</span><span class="sop-note">teguran tidak diindahkan</span></div></li>
+        <li><span class="sop-step">4</span><div><b>Rekomendasi Sanksi Lanjutan</b><span class="sop-sla">-</span><span class="sop-note">paksaan pemerintah tidak dilaksanakan</span></div></li>
+      </ol>
+      <p class="note">Pengingat otomatis dari kolom tenggat: notifikasi grup WhatsApp Bidang pada H-7 dan H-1.</p>
+    </div>
+    <div class="card">
+      <h2>Objek Perlu Pengawasan Ulang</h2>
+      <p class="cap">Pengawasan terakhir lebih dari 2 tahun lalu &middot; 15 objek</p>
+      <div class="tbl-scroll" style="max-height:230px">
+        <table style="min-width:0">
+          <thead><tr><th>Objek Usaha</th><th style="width:120px">Terakhir</th><th style="width:74px">Bulan</th></tr></thead>
+          <tbody>
+          <tr><td class="c-name">Kilang Padi Sederhana</td><td class="c-date">2021-03-10</td><td class="c-date" style="text-align:right">65</td></tr><tr><td class="c-name">Binanga</td><td class="c-date">2022-05-20</td><td class="c-date" style="text-align:right">51</td></tr><tr><td class="c-name">HAM</td><td class="c-date">2022-12-19</td><td class="c-date" style="text-align:right">44</td></tr><tr><td class="c-name">PT. MAL (Maja Agung Latexindo)</td><td class="c-date">2023-08-31</td><td class="c-date" style="text-align:right">36</td></tr><tr><td class="c-name">PT. SUMBER SAWIT JAYA LESTARI</td><td class="c-date">2023-09-26</td><td class="c-date" style="text-align:right">35</td></tr><tr><td class="c-name">PT.INDO COCO PRIMA LESTARI</td><td class="c-date">2023-09-27</td><td class="c-date" style="text-align:right">35</td></tr><tr><td class="c-name">PT. LBS (Labura Berkah Sejahtera)</td><td class="c-date">2024-01-15</td><td class="c-date" style="text-align:right">31</td></tr><tr><td class="c-name">PT. NAGALI SEMANGAT JAYA</td><td class="c-date">2024-01-31</td><td class="c-date" style="text-align:right">31</td></tr><tr><td class="c-name">PTPN IV Regional I Kebun Labuhan Haji</td><td class="c-date">2024-01-17</td><td class="c-date" style="text-align:right">31</td></tr><tr><td class="c-name">PT. Kurnia Mitra Sawit</td><td class="c-date">2024-02-12</td><td class="c-date" style="text-align:right">30</td></tr><tr><td class="c-name">PT. SMART Tbk — Kebun Adipati</td><td class="c-date">2024-04-24</td><td class="c-date" style="text-align:right">28</td></tr><tr><td class="c-name">Rumah Sakit Sri Pamela Membang Muda</td><td class="c-date">2024-04-30</td><td class="c-date" style="text-align:right">28</td></tr><tr><td class="c-name">Virman</td><td class="c-date">2024-04-04</td><td class="c-date" style="text-align:right">28</td></tr><tr><td class="c-name">PT. Andalas Intiagro Lestari</td><td class="c-date">2024-06-13</td><td class="c-date" style="text-align:right">26</td></tr><tr><td class="c-name">SSL dan SLS</td><td class="c-date">2024-06-04</td><td class="c-date" style="text-align:right">26</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h2>Rapor Ketaatan per Objek Usaha</h2>
+    <div class="toolbar">
+      <span class="search">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="9" r="6"/><path d="M14 14l4 4"/></svg>
+        <input id="q" type="search" placeholder="cari objek usaha atau aspek temuan..." aria-label="Cari">
+      </span>
+      <select id="fy" aria-label="Saring tahun"><option value="">Semua tahun</option><option value="2021">2021</option><option value="2022">2022</option><option value="2023">2023</option><option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option></select>
+      <select id="fa" aria-label="Saring aspek"><option value="">Semua aspek</option><option value="Lain-lain">Lain-lain</option><option value="Air Limbah/IPAL">Air Limbah/IPAL</option><option value="Persetujuan Lingkungan">Persetujuan Lingkungan</option><option value="Limbah B3">Limbah B3</option><option value="Emisi/Udara">Emisi/Udara</option><option value="Pencemaran/Tanggul/Ceceran">Pencemaran/Tanggul/Ceceran</option><option value="Pelaporan/SIMPEL">Pelaporan/SIMPEL</option><option value="Sampah/Domestik">Sampah/Domestik</option><option value="Sertifikasi SDM">Sertifikasi SDM</option><option value="Kebakaran Lahan (Karhutla)">Kebakaran Lahan (Karhutla)</option><option value="Kewajiban Non-LH">Kewajiban Non-LH</option><option value="Lahan Gambut">Lahan Gambut</option><option value="Land Application/POME">Land Application/POME</option><option value="SIMPEL/Pelaporan">SIMPEL/Pelaporan</option></select>
+    </div>
+    <p class="count" id="count">Menampilkan 57 dari 57 objek usaha</p>
+    <div class="tbl-scroll">
+      <table id="t">
+        <colgroup><col class="c-no"><col class="c-name"><col class="c-date"><col><col class="c-status"></colgroup>
+        <thead><tr>
+          <th data-k="no">No</th><th data-k="name">Objek Usaha</th><th data-k="date" class="asc">Pengawasan Terakhir</th>
+          <th data-k="aspek">Aspek Temuan Terakhir</th><th data-k="status">Status</th>
+        </tr></thead>
+        <tbody>
+      <tr data-year="2022" data-aspek="Lain-lain | Limbah B3 | Pelaporan/SIMPEL | Pencemaran/Tanggul/Ceceran" data-status="Merah"><td class="c-no">1</td><td class="c-name">Binanga</td><td class="c-date">2022-05-20</td><td class="c-aspek"><span title="Lain-lain · Limbah B3 · Pelaporan/SIMPEL · Pencemaran/Tanggul/Ceceran">Lain-lain · Limbah B3 · Pelaporan/SIMPEL · Pencemaran/Tanggul/Ceceran</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2025" data-aspek="Air Limbah/IPAL | Emisi/Udara | Kewajiban Non-LH | Lain-lain | Land Application/POME | Limbah B3 | Pencemaran/Tanggul/Ceceran | Persetujuan Lingkungan | Sampah/Domestik | Sertifikasi SDM" data-status="Merah"><td class="c-no">2</td><td class="c-name">CV Sawit Sumatera Perkasa</td><td class="c-date">2025-10-10</td><td class="c-aspek"><span title="Air Limbah/IPAL · Emisi/Udara · Kewajiban Non-LH · Lain-lain · Land Application/POME · Limbah B3 · Pencemaran/Tanggul/Ceceran · Persetujuan Lingkungan · Sampah/Domestik · Sertifikasi SDM">Air Limbah/IPAL · Emisi/Udara · Kewajiban Non-LH · Lain-lain · Land Application/POME · Limbah B3 · Pencemaran/Tanggul/Ceceran · Persetujuan Lingkungan · Sampah/Domestik · Sertifikasi SDM</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2026" data-aspek="" data-status="Merah"><td class="c-no">3</td><td class="c-name">CV. Bulan Sawit Cemerlang</td><td class="c-date">2026-04-06</td><td class="c-aspek"><span title="—">—</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2025" data-aspek="Air Limbah/IPAL | Emisi/Udara | Lain-lain | Limbah B3 | Persetujuan Lingkungan | Sampah/Domestik" data-status="Merah"><td class="c-no">4</td><td class="c-name">Citra Agung Nelayan</td><td class="c-date">2025-05-19</td><td class="c-aspek"><span title="Air Limbah/IPAL · Emisi/Udara · Lain-lain · Limbah B3 · Persetujuan Lingkungan · Sampah/Domestik">Air Limbah/IPAL · Emisi/Udara · Lain-lain · Limbah B3 · Persetujuan Lingkungan · Sampah/Domestik</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2022" data-aspek="Air Limbah/IPAL | Kebakaran Lahan (Karhutla) | Lahan Gambut | Lain-lain | Limbah B3" data-status="Merah"><td class="c-no">5</td><td class="c-name">HAM</td><td class="c-date">2022-12-19</td><td class="c-aspek"><span title="Air Limbah/IPAL · Kebakaran Lahan (Karhutla) · Lahan Gambut · Lain-lain · Limbah B3">Air Limbah/IPAL · Kebakaran Lahan (Karhutla) · Lahan Gambut · Lain-lain · Limbah B3</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2025" data-aspek="Emisi/Udara | Lain-lain | Limbah B3 | Pelaporan/SIMPEL | Persetujuan Lingkungan | Sertifikasi SDM" data-status="Merah"><td class="c-no">6</td><td class="c-name">KIP</td><td class="c-date">2025-10-03</td><td class="c-aspek"><span title="Emisi/Udara · Lain-lain · Limbah B3 · Pelaporan/SIMPEL · Persetujuan Lingkungan · Sertifikasi SDM">Emisi/Udara · Lain-lain · Limbah B3 · Pelaporan/SIMPEL · Persetujuan Lingkungan · Sertifikasi SDM</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2021" data-aspek="" data-status="Merah"><td class="c-no">7</td><td class="c-name">Kilang Padi Sederhana</td><td class="c-date">2021-03-10</td><td class="c-aspek"><span title="—">—</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2026" data-aspek="" data-status="Merah"><td class="c-no">8</td><td class="c-name">Minerba Pematang-Dumas</td><td class="c-date">2026-01-14</td><td class="c-aspek"><span title="—">—</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2025" data-aspek="Air Limbah/IPAL | Limbah B3" data-status="Merah"><td class="c-no">9</td><td class="c-name">PKS PT. Merbaujaya Indahraya</td><td class="c-date">2025-09-29</td><td class="c-aspek"><span title="Air Limbah/IPAL · Limbah B3">Air Limbah/IPAL · Limbah B3</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2026" data-aspek="Lain-lain | Persetujuan Lingkungan" data-status="Merah"><td class="c-no">10</td><td class="c-name">PT Ayu Septa</td><td class="c-date">2026-01-27</td><td class="c-aspek"><span title="Lain-lain · Persetujuan Lingkungan">Lain-lain · Persetujuan Lingkungan</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2025" data-aspek="Limbah B3 | Sertifikasi SDM" data-status="Merah"><td class="c-no">11</td><td class="c-name">PT Charoen Pokphand Jaya Farm</td><td class="c-date">2025-09-18</td><td class="c-aspek"><span title="Limbah B3 · Sertifikasi SDM">Limbah B3 · Sertifikasi SDM</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2025" data-aspek="Persetujuan Lingkungan" data-status="Merah"><td class="c-no">12</td><td class="c-name">PT Grahadura Leidong Prima</td><td class="c-date">2025-08-28</td><td class="c-aspek"><span title="Persetujuan Lingkungan">Persetujuan Lingkungan</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2025" data-aspek="Air Limbah/IPAL | Limbah B3" data-status="Merah"><td class="c-no">13</td><td class="c-name">PT J SURYA SAKTI</td><td class="c-date">2025-10-13</td><td class="c-aspek"><span title="Air Limbah/IPAL · Limbah B3">Air Limbah/IPAL · Limbah B3</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2026" data-aspek="Air Limbah/IPAL | Lain-lain | Pencemaran/Tanggul/Ceceran | Persetujuan Lingkungan" data-status="Merah"><td class="c-no">14</td><td class="c-name">PT Kwala Intan Sawit Selatan</td><td class="c-date">2026-05-21</td><td class="c-aspek"><span title="Air Limbah/IPAL · Lain-lain · Pencemaran/Tanggul/Ceceran · Persetujuan Lingkungan">Air Limbah/IPAL · Lain-lain · Pencemaran/Tanggul/Ceceran · Persetujuan Lingkungan</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2026" data-aspek="Lain-lain | Pencemaran/Tanggul/Ceceran" data-status="Merah"><td class="c-no">15</td><td class="c-name">PT MP. Leidong West Indonesia</td><td class="c-date">2026-02-18</td><td class="c-aspek"><span title="Lain-lain · Pencemaran/Tanggul/Ceceran">Lain-lain · Pencemaran/Tanggul/Ceceran</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2026" data-aspek="Persetujuan Lingkungan | Limbah B3" data-status="Merah"><td class="c-no">16</td><td class="c-name">PT Mauli Roda Sawitta</td><td class="c-date">2026-02-24</td><td class="c-aspek"><span title="Persetujuan Lingkungan · Limbah B3">Persetujuan Lingkungan · Limbah B3</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2025" data-aspek="Lahan Gambut | Limbah B3 | Pencemaran/Tanggul/Ceceran | Sampah/Domestik" data-status="Merah"><td class="c-no">17</td><td class="c-name">PT Milano</td><td class="c-date">2025-09-18</td><td class="c-aspek"><span title="Lahan Gambut · Limbah B3 · Pencemaran/Tanggul/Ceceran · Sampah/Domestik">Lahan Gambut · Limbah B3 · Pencemaran/Tanggul/Ceceran · Sampah/Domestik</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2026" data-aspek="Air Limbah/IPAL" data-status="Merah"><td class="c-no">18</td><td class="c-name">PT Multiaranusa Agro Sejahtera</td><td class="c-date">2026-01-14</td><td class="c-aspek"><span title="Air Limbah/IPAL">Air Limbah/IPAL</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2025" data-aspek="Persetujuan Lingkungan" data-status="Merah"><td class="c-no">19</td><td class="c-name">PT SMART Adipati Estate</td><td class="c-date">2025-10-21</td><td class="c-aspek"><span title="Persetujuan Lingkungan">Persetujuan Lingkungan</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2026" data-aspek="" data-status="Merah"><td class="c-no">20</td><td class="c-name">PT Sawit Bandar Durian</td><td class="c-date">2026-01-12</td><td class="c-aspek"><span title="—">—</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2026" data-aspek="Limbah B3" data-status="Merah"><td class="c-no">21</td><td class="c-name">PT Sirata-rata Alas Tonga</td><td class="c-date">2026-03-09</td><td class="c-aspek"><span title="Limbah B3">Limbah B3</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2026" data-aspek="Air Limbah/IPAL | Emisi/Udara | Lain-lain | Persetujuan Lingkungan | Sertifikasi SDM" data-status="Merah"><td class="c-no">22</td><td class="c-name">PT Socfin Indonesia</td><td class="c-date">2026-03-09</td><td class="c-aspek"><span title="Air Limbah/IPAL · Emisi/Udara · Lain-lain · Persetujuan Lingkungan · Sertifikasi SDM">Air Limbah/IPAL · Emisi/Udara · Lain-lain · Persetujuan Lingkungan · Sertifikasi SDM</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2025" data-aspek="Air Limbah/IPAL | Lain-lain | Land Application/POME | Pencemaran/Tanggul/Ceceran | Persetujuan Lingkungan | Sampah/Domestik" data-status="Merah"><td class="c-no">23</td><td class="c-name">PT Sri Perlak</td><td class="c-date">2025-10-17</td><td class="c-aspek"><span title="Air Limbah/IPAL · Lain-lain · Land Application/POME · Pencemaran/Tanggul/Ceceran · Persetujuan Lingkungan · Sampah/Domestik">Air Limbah/IPAL · Lain-lain · Land Application/POME · Pencemaran/Tanggul/Ceceran · Persetujuan Lingkungan · Sampah/Domestik</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2026" data-aspek="Persetujuan Lingkungan | Air Limbah/IPAL | Limbah B3" data-status="Merah"><td class="c-no">24</td><td class="c-name">PT Terang Bulan Indah</td><td class="c-date">2026-04-01</td><td class="c-aspek"><span title="Persetujuan Lingkungan · Air Limbah/IPAL · Limbah B3">Persetujuan Lingkungan · Air Limbah/IPAL · Limbah B3</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2025" data-aspek="Kebakaran Lahan (Karhutla) | Lahan Gambut | Lain-lain | Limbah B3 | Persetujuan Lingkungan" data-status="Merah"><td class="c-no">25</td><td class="c-name">PT Tor Ganda – Kebun Tahuan Ganda</td><td class="c-date">2025-09-25</td><td class="c-aspek"><span title="Kebakaran Lahan (Karhutla) · Lahan Gambut · Lain-lain · Limbah B3 · Persetujuan Lingkungan">Kebakaran Lahan (Karhutla) · Lahan Gambut · Lain-lain · Limbah B3 · Persetujuan Lingkungan</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2025" data-aspek="Air Limbah/IPAL | Lain-lain | Limbah B3 | Pencemaran/Tanggul/Ceceran" data-status="Merah"><td class="c-no">26</td><td class="c-name">PT UMADA</td><td class="c-date">2025-03-07</td><td class="c-aspek"><span title="Air Limbah/IPAL · Lain-lain · Limbah B3 · Pencemaran/Tanggul/Ceceran">Air Limbah/IPAL · Lain-lain · Limbah B3 · Pencemaran/Tanggul/Ceceran</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2025" data-aspek="Air Limbah/IPAL | Emisi/Udara | Kewajiban Non-LH | Lain-lain | Limbah B3 | Pelaporan/SIMPEL | Pencemaran/Tanggul/Ceceran | Persetujuan Lingkungan | Sertifikasi SDM" data-status="Merah"><td class="c-no">27</td><td class="c-name">PT. AAL (Agung Agro Lestari)</td><td class="c-date">2025-09-22</td><td class="c-aspek"><span title="Air Limbah/IPAL · Emisi/Udara · Kewajiban Non-LH · Lain-lain · Limbah B3 · Pelaporan/SIMPEL · Pencemaran/Tanggul/Ceceran · Persetujuan Lingkungan · Sertifikasi SDM">Air Limbah/IPAL · Emisi/Udara · Kewajiban Non-LH · Lain-lain · Limbah B3 · Pelaporan/SIMPEL · Pencemaran/Tanggul/Ceceran · Persetujuan Lingkungan · Sertifikasi SDM</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2024" data-aspek="Air Limbah/IPAL | Kebakaran Lahan (Karhutla) | Kewajiban Non-LH | Lahan Gambut | Lain-lain | Pelaporan/SIMPEL | Persetujuan Lingkungan" data-status="Merah"><td class="c-no">28</td><td class="c-name">PT. Andalas Intiagro Lestari</td><td class="c-date">2024-06-13</td><td class="c-aspek"><span title="Air Limbah/IPAL · Kebakaran Lahan (Karhutla) · Kewajiban Non-LH · Lahan Gambut · Lain-lain · Pelaporan/SIMPEL · Persetujuan Lingkungan">Air Limbah/IPAL · Kebakaran Lahan (Karhutla) · Kewajiban Non-LH · Lahan Gambut · Lain-lain · Pelaporan/SIMPEL · Persetujuan Lingkungan</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2025" data-aspek="Persetujuan Lingkungan | Air Limbah/IPAL | Limbah B3 | SIMPEL/Pelaporan" data-status="Merah"><td class="c-no">29</td><td class="c-name">PT. ERA SAWIT SEJATI</td><td class="c-date">2025-11-07</td><td class="c-aspek"><span title="Persetujuan Lingkungan · Air Limbah/IPAL · Limbah B3 · SIMPEL/Pelaporan">Persetujuan Lingkungan · Air Limbah/IPAL · Limbah B3 · SIMPEL/Pelaporan</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2025" data-aspek="Kebakaran Lahan (Karhutla) | Lahan Gambut | Lain-lain | Persetujuan Lingkungan" data-status="Merah"><td class="c-no">30</td><td class="c-name">PT. Grahadura Leidongprima</td><td class="c-date">2025-08-02</td><td class="c-aspek"><span title="Kebakaran Lahan (Karhutla) · Lahan Gambut · Lain-lain · Persetujuan Lingkungan">Kebakaran Lahan (Karhutla) · Lahan Gambut · Lain-lain · Persetujuan Lingkungan</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2024" data-aspek="Air Limbah/IPAL | Lain-lain" data-status="Merah"><td class="c-no">31</td><td class="c-name">PT. Kurnia Mitra Sawit</td><td class="c-date">2024-02-12</td><td class="c-aspek"><span title="Air Limbah/IPAL · Lain-lain">Air Limbah/IPAL · Lain-lain</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2024" data-aspek="Air Limbah/IPAL | Emisi/Udara | Lain-lain | Land Application/POME | Pencemaran/Tanggul/Ceceran | Persetujuan Lingkungan" data-status="Merah"><td class="c-no">32</td><td class="c-name">PT. LBS (Labura Berkah Sejahtera)</td><td class="c-date">2024-01-15</td><td class="c-aspek"><span title="Air Limbah/IPAL · Emisi/Udara · Lain-lain · Land Application/POME · Pencemaran/Tanggul/Ceceran · Persetujuan Lingkungan">Air Limbah/IPAL · Emisi/Udara · Lain-lain · Land Application/POME · Pencemaran/Tanggul/Ceceran · Persetujuan Lingkungan</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2026" data-aspek="Kebakaran Lahan (Karhutla) | Kewajiban Non-LH | Pencemaran/Tanggul/Ceceran | Sertifikasi SDM" data-status="Merah"><td class="c-no">33</td><td class="c-name">PT. Lingga Tiga Sawit</td><td class="c-date">2026-04-15</td><td class="c-aspek"><span title="Kebakaran Lahan (Karhutla) · Kewajiban Non-LH · Pencemaran/Tanggul/Ceceran · Sertifikasi SDM">Kebakaran Lahan (Karhutla) · Kewajiban Non-LH · Pencemaran/Tanggul/Ceceran · Sertifikasi SDM</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2023" data-aspek="Air Limbah/IPAL | Emisi/Udara | Lain-lain | Pelaporan/SIMPEL | Persetujuan Lingkungan | Sertifikasi SDM" data-status="Merah"><td class="c-no">34</td><td class="c-name">PT. MAL (Maja Agung Latexindo)</td><td class="c-date">2023-08-31</td><td class="c-aspek"><span title="Air Limbah/IPAL · Emisi/Udara · Lain-lain · Pelaporan/SIMPEL · Persetujuan Lingkungan · Sertifikasi SDM">Air Limbah/IPAL · Emisi/Udara · Lain-lain · Pelaporan/SIMPEL · Persetujuan Lingkungan · Sertifikasi SDM</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2026" data-aspek="Emisi/Udara | Lain-lain" data-status="Merah"><td class="c-no">35</td><td class="c-name">PT. MSJ (Multiagro Sumatera Jaya)</td><td class="c-date">2026-03-02</td><td class="c-aspek"><span title="Emisi/Udara · Lain-lain">Emisi/Udara · Lain-lain</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2025" data-aspek="Air Limbah/IPAL | SIMPEL/Pelaporan" data-status="Merah"><td class="c-no">36</td><td class="c-name">PT. Multiagro Sumatera Jaya</td><td class="c-date">2025-08-17</td><td class="c-aspek"><span title="Air Limbah/IPAL · SIMPEL/Pelaporan">Air Limbah/IPAL · SIMPEL/Pelaporan</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2025" data-aspek="" data-status="Merah"><td class="c-no">37</td><td class="c-name">PT. Mutiaranusa Agro Sejahtera</td><td class="c-date">2025-06-11</td><td class="c-aspek"><span title="—">—</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2024" data-aspek="Emisi/Udara | Kebakaran Lahan (Karhutla) | Lain-lain | Limbah B3 | Pelaporan/SIMPEL | Persetujuan Lingkungan | Sampah/Domestik" data-status="Merah"><td class="c-no">38</td><td class="c-name">PT. NAGALI SEMANGAT JAYA</td><td class="c-date">2024-01-31</td><td class="c-aspek"><span title="Emisi/Udara · Kebakaran Lahan (Karhutla) · Lain-lain · Limbah B3 · Pelaporan/SIMPEL · Persetujuan Lingkungan · Sampah/Domestik">Emisi/Udara · Kebakaran Lahan (Karhutla) · Lain-lain · Limbah B3 · Pelaporan/SIMPEL · Persetujuan Lingkungan · Sampah/Domestik</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2024" data-aspek="Air Limbah/IPAL | Kebakaran Lahan (Karhutla) | Lahan Gambut | Lain-lain | Pencemaran/Tanggul/Ceceran" data-status="Merah"><td class="c-no">39</td><td class="c-name">PT. SMART Tbk — Kebun Adipati</td><td class="c-date">2024-04-24</td><td class="c-aspek"><span title="Air Limbah/IPAL · Kebakaran Lahan (Karhutla) · Lahan Gambut · Lain-lain · Pencemaran/Tanggul/Ceceran">Air Limbah/IPAL · Kebakaran Lahan (Karhutla) · Lahan Gambut · Lain-lain · Pencemaran/Tanggul/Ceceran</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2023" data-aspek="Air Limbah/IPAL | Emisi/Udara | Lain-lain | Limbah B3 | Pelaporan/SIMPEL | Sampah/Domestik" data-status="Merah"><td class="c-no">40</td><td class="c-name">PT. SUMBER SAWIT JAYA LESTARI</td><td class="c-date">2023-09-26</td><td class="c-aspek"><span title="Air Limbah/IPAL · Emisi/Udara · Lain-lain · Limbah B3 · Pelaporan/SIMPEL · Sampah/Domestik">Air Limbah/IPAL · Emisi/Udara · Lain-lain · Limbah B3 · Pelaporan/SIMPEL · Sampah/Domestik</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2026" data-aspek="Pelaporan/SIMPEL | Persetujuan Lingkungan" data-status="Merah"><td class="c-no">41</td><td class="c-name">PT. Serba Huta Jaya</td><td class="c-date">2026-05-18</td><td class="c-aspek"><span title="Pelaporan/SIMPEL · Persetujuan Lingkungan">Pelaporan/SIMPEL · Persetujuan Lingkungan</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2025" data-aspek="Air Limbah/IPAL | Emisi/Udara | Kewajiban Non-LH | Lain-lain | Land Application/POME | Pelaporan/SIMPEL | Sertifikasi SDM" data-status="Merah"><td class="c-no">42</td><td class="c-name">PT. Sinar Sawit Lestari</td><td class="c-date">2025-09-29</td><td class="c-aspek"><span title="Air Limbah/IPAL · Emisi/Udara · Kewajiban Non-LH · Lain-lain · Land Application/POME · Pelaporan/SIMPEL · Sertifikasi SDM">Air Limbah/IPAL · Emisi/Udara · Kewajiban Non-LH · Lain-lain · Land Application/POME · Pelaporan/SIMPEL · Sertifikasi SDM</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2025" data-aspek="" data-status="Merah"><td class="c-no">43</td><td class="c-name">PT. Tari Agro Nabati</td><td class="c-date">2025-08-12</td><td class="c-aspek"><span title="—">—</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2023" data-aspek="" data-status="Merah"><td class="c-no">44</td><td class="c-name">PT.INDO COCO PRIMA LESTARI</td><td class="c-date">2023-09-27</td><td class="c-aspek"><span title="—">—</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2026" data-aspek="Persetujuan Lingkungan | Air Limbah/IPAL | Limbah B3" data-status="Merah"><td class="c-no">45</td><td class="c-name">PT.SMART Tbk PADANG HALABAN</td><td class="c-date">2026-03-30</td><td class="c-aspek"><span title="Persetujuan Lingkungan · Air Limbah/IPAL · Limbah B3">Persetujuan Lingkungan · Air Limbah/IPAL · Limbah B3</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2026" data-aspek="" data-status="Merah"><td class="c-no">46</td><td class="c-name">PTPN III Membang Muda</td><td class="c-date">2026-06-09</td><td class="c-aspek"><span title="—">—</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2026" data-aspek="Air Limbah/IPAL | Pencemaran/Tanggul/Ceceran" data-status="Merah"><td class="c-no">47</td><td class="c-name">PTPN IV Berangir</td><td class="c-date">2026-01-08</td><td class="c-aspek"><span title="Air Limbah/IPAL · Pencemaran/Tanggul/Ceceran">Air Limbah/IPAL · Pencemaran/Tanggul/Ceceran</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2024" data-aspek="Lain-lain | Persetujuan Lingkungan" data-status="Merah"><td class="c-no">48</td><td class="c-name">PTPN IV Regional I Kebun Labuhan Haji</td><td class="c-date">2024-01-17</td><td class="c-aspek"><span title="Lain-lain · Persetujuan Lingkungan">Lain-lain · Persetujuan Lingkungan</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2026" data-aspek="Air Limbah/IPAL | Emisi/Udara | Land Application/POME | Limbah B3 | Pelaporan/SIMPEL | Persetujuan Lingkungan | Sampah/Domestik" data-status="Merah"><td class="c-no">49</td><td class="c-name">Palmindo</td><td class="c-date">2026-05-13</td><td class="c-aspek"><span title="Air Limbah/IPAL · Emisi/Udara · Land Application/POME · Limbah B3 · Pelaporan/SIMPEL · Persetujuan Lingkungan · Sampah/Domestik">Air Limbah/IPAL · Emisi/Udara · Land Application/POME · Limbah B3 · Pelaporan/SIMPEL · Persetujuan Lingkungan · Sampah/Domestik</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2026" data-aspek="Air Limbah/IPAL | Emisi/Udara | Kebakaran Lahan (Karhutla) | Lain-lain | Limbah B3 | Pencemaran/Tanggul/Ceceran | Persetujuan Lingkungan | Sampah/Domestik | Sertifikasi SDM" data-status="Merah"><td class="c-no">50</td><td class="c-name">RSU Flora</td><td class="c-date">2026-05-25</td><td class="c-aspek"><span title="Air Limbah/IPAL · Emisi/Udara · Kebakaran Lahan (Karhutla) · Lain-lain · Limbah B3 · Pencemaran/Tanggul/Ceceran · Persetujuan Lingkungan · Sampah/Domestik · Sertifikasi SDM">Air Limbah/IPAL · Emisi/Udara · Kebakaran Lahan (Karhutla) · Lain-lain · Limbah B3 · Pencemaran/Tanggul/Ceceran · Persetujuan Lingkungan · Sampah/Domestik · Sertifikasi SDM</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2026" data-aspek="Air Limbah/IPAL | Emisi/Udara | Kebakaran Lahan (Karhutla) | Lain-lain | Limbah B3 | Pencemaran/Tanggul/Ceceran | Persetujuan Lingkungan | Sampah/Domestik | Sertifikasi SDM" data-status="Merah"><td class="c-no">51</td><td class="c-name">RSU Tiga Bersaudara</td><td class="c-date">2026-05-21</td><td class="c-aspek"><span title="Air Limbah/IPAL · Emisi/Udara · Kebakaran Lahan (Karhutla) · Lain-lain · Limbah B3 · Pencemaran/Tanggul/Ceceran · Persetujuan Lingkungan · Sampah/Domestik · Sertifikasi SDM">Air Limbah/IPAL · Emisi/Udara · Kebakaran Lahan (Karhutla) · Lain-lain · Limbah B3 · Pencemaran/Tanggul/Ceceran · Persetujuan Lingkungan · Sampah/Domestik · Sertifikasi SDM</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2025" data-aspek="Air Limbah/IPAL | Emisi/Udara | Lain-lain | Limbah B3 | Pelaporan/SIMPEL | Persetujuan Lingkungan | Sampah/Domestik | Sertifikasi SDM" data-status="Merah"><td class="c-no">52</td><td class="c-name">RSUD Aek Kanopan</td><td class="c-date">2025-07-30</td><td class="c-aspek"><span title="Air Limbah/IPAL · Emisi/Udara · Lain-lain · Limbah B3 · Pelaporan/SIMPEL · Persetujuan Lingkungan · Sampah/Domestik · Sertifikasi SDM">Air Limbah/IPAL · Emisi/Udara · Lain-lain · Limbah B3 · Pelaporan/SIMPEL · Persetujuan Lingkungan · Sampah/Domestik · Sertifikasi SDM</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2024" data-aspek="Air Limbah/IPAL | Lain-lain | Limbah B3" data-status="Merah"><td class="c-no">53</td><td class="c-name">Rumah Sakit Sri Pamela Membang Muda</td><td class="c-date">2024-04-30</td><td class="c-aspek"><span title="Air Limbah/IPAL · Lain-lain · Limbah B3">Air Limbah/IPAL · Lain-lain · Limbah B3</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2024" data-aspek="Lain-lain | Limbah B3 | Pelaporan/SIMPEL | Persetujuan Lingkungan" data-status="Merah"><td class="c-no">54</td><td class="c-name">SSL dan SLS</td><td class="c-date">2024-06-04</td><td class="c-aspek"><span title="Lain-lain · Limbah B3 · Pelaporan/SIMPEL · Persetujuan Lingkungan">Lain-lain · Limbah B3 · Pelaporan/SIMPEL · Persetujuan Lingkungan</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2026" data-aspek="Emisi/Udara | Limbah B3 | Sertifikasi SDM" data-status="Merah"><td class="c-no">55</td><td class="c-name">Sirata-rata</td><td class="c-date">2026-03-09</td><td class="c-aspek"><span title="Emisi/Udara · Limbah B3 · Sertifikasi SDM">Emisi/Udara · Limbah B3 · Sertifikasi SDM</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2026" data-aspek="Air Limbah/IPAL | Lain-lain | Limbah B3 | Pelaporan/SIMPEL | Persetujuan Lingkungan | Sampah/Domestik" data-status="Merah"><td class="c-no">56</td><td class="c-name">TBI</td><td class="c-date">2026-04-01</td><td class="c-aspek"><span title="Air Limbah/IPAL · Lain-lain · Limbah B3 · Pelaporan/SIMPEL · Persetujuan Lingkungan · Sampah/Domestik">Air Limbah/IPAL · Lain-lain · Limbah B3 · Pelaporan/SIMPEL · Persetujuan Lingkungan · Sampah/Domestik</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr data-year="2024" data-aspek="Air Limbah/IPAL | Kewajiban Non-LH | Lain-lain | Pencemaran/Tanggul/Ceceran | Persetujuan Lingkungan | Sampah/Domestik" data-status="Merah"><td class="c-no">57</td><td class="c-name">Virman</td><td class="c-date">2024-04-04</td><td class="c-aspek"><span title="Air Limbah/IPAL · Kewajiban Non-LH · Lain-lain · Pencemaran/Tanggul/Ceceran · Persetujuan Lingkungan · Sampah/Domestik">Air Limbah/IPAL · Kewajiban Non-LH · Lain-lain · Pencemaran/Tanggul/Ceceran · Persetujuan Lingkungan · Sampah/Domestik</span></td><td class="c-status"><span class="badge badge--red"><span class="dot"></span>Merah</span></td></tr>
+      <tr id="empty"><td colspan="5">Tidak ada objek usaha yang cocok.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="callout">
+    <b>Catatan jujur</b>
+    <p>Seluruh 57 objek usaha masih berstatus Merah pada pemetaan awal, dan sampai laporan disusun belum bergerak. Yang sudah berubah adalah kemampuan melihat dan menagih: tenggat kini diketahui, penanggung jawab jelas, riwayat tersimpan. Sistem memindahkan persoalan lama ke tempat yang dapat dilihat, syarat pertama sebelum diselesaikan.</p>
+  </div>
+
+</div>
+
+<footer>
+  SIPATUH-PKS &middot; Bidang PPLH Dinas Lingkungan Hidup Kabupaten Labuhanbatu Utara<br>
+  Status ketaatan dihitung atas tenggat 14 hari sejak tanggal pengawasan &middot; Sumber data: basis data Google Sheets (Looker Studio) &middot; Salinan luring 31-08-2026
+</footer>
+
+<script>
+var TOTAL = 57;
+var q=document.getElementById('q'), fy=document.getElementById('fy'), fa=document.getElementById('fa');
+var body=document.querySelector('#t tbody'), rowsA=[].slice.call(body.querySelectorAll('tr:not(#empty)'));
+function f(){
+  var s=q.value.trim().toLowerCase(), y=fy.value, a=fa.value, shown=0;
+  rowsA.forEach(function(r){
+    var ok=(!s||r.innerText.toLowerCase().indexOf(s)!==-1)
+        && (!y||r.dataset.year===y)
+        && (!a||(r.dataset.aspek||'').indexOf(a)!==-1);
+    r.style.display=ok?'':'none'; if(ok)shown++;
+  });
+  document.getElementById('empty').style.display=shown?'none':'table-row';
+  document.getElementById('count').textContent='Menampilkan '+shown+' dari '+TOTAL+' objek usaha';
+}
+q.addEventListener('input',f); fy.addEventListener('change',f); fa.addEventListener('change',f);
+
+var dir={};
+document.querySelectorAll('#t thead th').forEach(function(th){
+  th.addEventListener('click',function(){
+    var k=th.dataset.k, asc=!(dir[k]===true); dir={}; dir[k]=asc;
+    document.querySelectorAll('#t thead th').forEach(function(x){x.classList.remove('asc','desc')});
+    th.classList.add(asc?'asc':'desc');
+    var idx={no:0,name:1,date:2,aspek:3,status:4}[k];
+    rowsA.sort(function(x,y){
+      var a=x.children[idx].innerText.trim(), b=y.children[idx].innerText.trim();
+      if(k==='no') return (asc?1:-1)*(parseInt(a)-parseInt(b));
+      return (asc?1:-1)*a.localeCompare(b,'id');
+    });
+    rowsA.forEach(function(r){body.insertBefore(r,document.getElementById('empty'))});
+  });
+});
+</script>
+</body>
+</html>

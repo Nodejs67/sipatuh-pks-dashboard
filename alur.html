@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Alur SIPATUH-PKS</title>
+<style>
+  :root{
+    --bg:#eef2ee; --surface:#fff; --ink:#1b2a21; --muted:#5c6b61;
+    --line:#dbe4dd; --brand:#1b5e20; --brand-700:#123f17; --brand-50:#eaf3eb;
+    --amber:#b26a00; --red:#c62828; --green:#2e7d32;
+    --radius:12px; --shadow:0 1px 3px rgba(16,32,20,.08),0 1px 1px rgba(16,32,20,.04);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:16px/1.6 "Segoe UI",Roboto,-apple-system,Arial,sans-serif}
+  header{background:var(--brand);color:#fff}
+  .head-in{max-width:1100px;margin:0 auto;padding:20px}
+  header h1{margin:0;font-size:20px;font-weight:600}
+  header p{margin:4px 0 0;font-size:13px;color:#e7f1e8}
+  header .accent{height:4px;background:#f5a623}
+  .wrap{max-width:1100px;margin:0 auto;padding:24px 20px 48px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:22px;margin-top:20px}
+  .card > h2{margin:0 0 16px;font-size:14px;font-weight:600;color:var(--brand-700);
+    text-transform:uppercase;letter-spacing:.6px;display:flex;align-items:center;gap:8px}
+  .card > h2::before{content:"";width:3px;height:15px;border-radius:2px;background:var(--brand)}
+
+  /* rantai alur */
+  .flow{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch}
+  .step{flex:1 1 150px;min-width:130px;background:var(--brand-50);border:1px solid var(--line);
+    border-radius:10px;padding:12px 12px 12px 14px;position:relative;border-left:3px solid var(--brand)}
+  .step .n{font-size:11px;font-weight:700;color:var(--brand);letter-spacing:.5px}
+  .step .t{font-size:14px;font-weight:600;margin-top:2px}
+  .step .d{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.45}
+  .step--end{border-left-color:var(--red)}
+  .step--end .n{color:var(--red)}
+  .mini{margin-top:14px;padding:12px 14px;background:#fff;border:1px dashed var(--line);
+    border-radius:10px;font-size:14px;font-weight:600;color:var(--brand-700);
+    letter-spacing:.3px;line-height:1.9}
+  .mini b{color:var(--red)}
+
+  /* rincian 7 langkah */
+  ol.detail{margin:0;padding:0;list-style:none;counter-reset:d}
+  ol.detail li{counter-increment:d;padding:14px 0 14px 44px;border-top:1px solid var(--line);position:relative}
+  ol.detail li:first-child{border-top:0}
+  ol.detail li::before{content:counter(d);position:absolute;left:0;top:14px;width:28px;height:28px;
+    background:var(--brand);color:#fff;border-radius:50%;display:flex;align-items:center;
+    justify-content:center;font-size:13px;font-weight:700}
+  ol.detail b{color:var(--brand-700)}
+  .num{font-variant-numeric:tabular-nums}
+
+  /* kalimat aman */
+  .safe{margin-top:20px;background:var(--brand-50);border:1px solid var(--line);
+    border-left:4px solid var(--amber);border-radius:12px;padding:20px}
+  .safe .lbl{font-size:12px;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:.6px}
+  .safe p{margin:8px 0 0;font-size:16px;line-height:1.7}
+
+  footer{max-width:1100px;margin:0 auto;padding:24px 20px 0;color:var(--muted);font-size:12px;text-align:center}
+
+  @media (max-width:640px){ .step{flex-basis:100%} header h1{font-size:17px} }
+  @media print{
+    body{background:#fff} .card,.safe{box-shadow:none}
+    .step{break-inside:avoid} ol.detail li{break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="head-in">
+    <h1>Alur SIPATUH-PKS &mdash; dari Hasil Pengawasan sampai Dasar Tindak Lanjut</h1>
+    <p>Dinas Lingkungan Hidup Kabupaten Labuhanbatu Utara &middot; Bidang PPLH</p>
+  </div>
+  <div class="accent"></div>
+</header>
+
+<div class="wrap">
+
+  <div class="card">
+    <h2>Rantai Alur</h2>
+    <div class="flow">
+      <div class="step"><div class="n">1 &middot; INPUT</div><div class="t">Hasil Pengawasan</div>
+        <div class="d">Berita Acara: identitas perusahaan, tanggal, aspek temuan, kewajiban, tenggat, status tindak lanjut.</div></div>
+      <div class="step"><div class="n">2 &middot; DATABASE</div><div class="t">Basis Data Terpusat</div>
+        <div class="d">File Word dan PDF terpisah dimigrasikan ke lembar kerja seragam, lalu divalidasi bersama rekan pengawas.</div></div>
+      <div class="step"><div class="n">3 &middot; DASHBOARD</div><div class="t">Dashboard Ketaatan</div>
+        <div class="d">Menampilkan profil, temuan, tenggat, dan status. Tidak perlu mencari dokumen satu per satu.</div></div>
+      <div class="step"><div class="n">4 &middot; MONITORING</div><div class="t">SOP &amp; SLA</div>
+        <div class="d">Setelah BA terbit, sistem menetapkan batas waktu tindak lanjut sesuai jenjang.</div></div>
+      <div class="step"><div class="n">5 &middot; REMINDER</div><div class="t">Pengingat Otomatis</div>
+        <div class="d">Notifikasi menjelang jatuh tempo pada H-7 dan H-1 lewat grup WhatsApp Bidang.</div></div>
+      <div class="step"><div class="n">6 &middot; TINDAK LANJUT</div><div class="t">Follow-up &amp; Eskalasi</div>
+        <div class="d">Pengawas menagih perbaikan; bila lewat tenggat, dieskalasikan berjenjang.</div></div>
+      <div class="step"><div class="n">7 &middot; SCORING</div><div class="t">Penilaian Ketaatan</div>
+        <div class="d">Lima aspek dengan pembobotan. Hijau &ge;80, Kuning 50&ndash;79, Merah &lt;50.</div></div>
+      <div class="step"><div class="n">8 &middot; RAPOR</div><div class="t">Rapor + QR Code</div>
+        <div class="d">Rapor per perusahaan, dilengkapi QR Code untuk akses status yang cepat dan terbatas.</div></div>
+      <div class="step step--end"><div class="n">9 &middot; ESKALASI</div><div class="t">Dasar Keputusan</div>
+        <div class="d">Bila kewajiban tidak dipenuhi, menjadi dasar eskalasi tindak lanjut atau sanksi sesuai SOP.</div></div>
+    </div>
+    <div class="mini">INPUT &rarr; DATABASE &rarr; DASHBOARD &rarr; MONITORING &rarr; REMINDER &rarr; TINDAK LANJUT &rarr; SCORING &rarr; RAPOR &rarr; <b>ESKALASI</b></div>
+  </div>
+
+  <div class="card">
+    <h2>Rincian Tujuh Tahap</h2>
+    <ol class="detail">
+      <li><b>Data masuk dari hasil pengawasan.</b> Terutama Berita Acara pengawasan: identitas perusahaan, tanggal pengawasan, aspek temuan, kewajiban yang harus dipenuhi, tenggat waktu, dan status tindak lanjut. Data historis yang berhasil dihimpun menjadi <span class="num">209</span> catatan pengawasan dari <span class="num">57</span> objek usaha dengan <span class="num">1.142</span> butir temuan.</li>
+      <li><b>Dibakukan dan disimpan dalam satu basis data terpusat.</b> Yang sebelumnya banyak file Word dan PDF terpisah dimigrasikan ke lembar kerja berstruktur seragam, lalu divalidasi bersama rekan pengawas.</li>
+      <li><b>Diolah menjadi dashboard ketaatan.</b> Menampilkan profil perusahaan, temuan, tenggat waktu, dan status tindak lanjut, sehingga pengawas dan pimpinan tidak perlu mencari dokumen satu per satu.</li>
+      <li><b>Setiap temuan dikawal berdasarkan SOP dan SLA.</b> Setelah Berita Acara terbit, sistem memberi batas waktu tindak lanjut, dan pengingat otomatis muncul menjelang jatuh tempo pada H-7 dan H-1. Pengawas tahu kapan harus follow-up dan kapan perlu eskalasi.</li>
+      <li><b>Progres tindak lanjut memengaruhi penilaian ketaatan.</b> Sistem memakai lima aspek pengawasan dengan pembobotan. Hasil akhir diklasifikasikan Hijau bila nilainya &ge;80, Kuning 50&ndash;79, Merah &lt;50. Dari situ dibuat rapor ketaatan tiap perusahaan.</li>
+      <li><b>Rapor dilengkapi QR Code.</b> Status ketaatan dapat diakses lebih cepat melalui akses yang telah ditentukan.</li>
+      <li><b>Sisi pembinaan lewat digitalisasi Berita Acara dan coaching clinic SIMPEL.</b> Template Berita Acara dibuat selaras dengan basis data sehingga pengisian langsung masuk tanpa input ulang. Pelaku usaha dibina soal pelaporan SIMPEL, dan status pelaporannya dimasukkan kembali ke dashboard.</li>
+    </ol>
+  </div>
+
+  <div class="safe">
+    <span class="lbl">Kalimat aman bila penguji mengejar konsep</span>
+    <p>&ldquo;SIPATUH-PKS bukan aplikasi yang menggantikan proses pengawasan atau kewenangan pejabat, Bu. SIPATUH-PKS adalah alat bantu untuk memastikan hasil pengawasan tidak berhenti di Berita Acara, tetapi terus dipantau sampai tindak lanjutnya jelas dan dapat menjadi dasar pengambilan keputusan.&rdquo;</p>
+  </div>
+
+</div>
+
+<footer>SIPATUH-PKS &middot; Bidang PPLH Dinas Lingkungan Hidup Kabupaten Labuhanbatu Utara</footer>
+</body>
+</html>
